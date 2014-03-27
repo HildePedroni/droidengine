@@ -12,7 +12,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     public static final String TAG = "Engine";
     private GameLoop loop;
-
     private String avgFPS;
 
     public GameView(Context context, AttributeSet attrs) {
