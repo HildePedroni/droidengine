@@ -30,6 +30,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     }
 
     public void clearScreen(Canvas canvas) {
+        postInvalidate();
         canvas.drawColor(Color.WHITE);
     }
 

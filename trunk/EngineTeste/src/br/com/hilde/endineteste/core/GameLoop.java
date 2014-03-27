@@ -14,7 +14,7 @@ public class GameLoop implements Runnable {
     private boolean isRunning = true;
 
     // FPS desejado
-    private final static int MAX_FPS = 60;
+    private final static int MAX_FPS = 100;
     // numero máximo de frames a ser ignorado
     private final static int MAX_FRAME_SKIPS = 5;
     // periodo de cada frame
@@ -74,7 +74,7 @@ public class GameLoop implements Runnable {
                 try {
                     canvas = this.surfaceHolder.lockCanvas();
                     synchronized (surfaceHolder) {
-                        gameView.postInvalidate();
+                        
                         beginTime = System.currentTimeMillis();
                         framesSkipped = 0;
                         this.gameView.update();
@@ -162,7 +162,7 @@ public class GameLoop implements Runnable {
             frameCountPerStatCycle = 0;
             statusIntervalTimer = System.currentTimeMillis();
             lastStatusStore = statusIntervalTimer;
-            // Log.d(TAG, "Average FPS:" + df.format(averageFps));
+            Log.d(GameView.TAG, "Average FPS:" + df.format(averageFps));
             gameView.setAvgFPS("FPS: " + df.format(averageFps));
 
         }
