@@ -2,6 +2,7 @@ package br.com.hilde.endineteste.core;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -11,6 +12,8 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     public static final String TAG = "Engine";
     private GameLoop loop;
+
+    private String avgFPS;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -26,6 +29,10 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         loop.stopGame();
     }
 
+    public void clearScreen(Canvas canvas) {
+        canvas.drawColor(Color.WHITE);
+    }
+
     // Metodos abstratos
 
     public abstract void draw(Canvas canvas);
@@ -34,9 +41,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     // Metodos de sufaceHolder
 
-    
-    
-    
     @Override
     public final void surfaceCreated(SurfaceHolder holder) {
         Log.i(TAG, "SurfaceCreated");
@@ -58,6 +62,10 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         Log.i(TAG, "SurfaceDestroied");
         // TODO Auto-generated method stub
 
+    }
+
+    protected void setAvgFPS(String avgFPS) {
+        this.avgFPS = avgFPS;
     }
 
 }
