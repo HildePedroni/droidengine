@@ -1,4 +1,4 @@
-package br.com.hilde.endineteste.core;
+package br.com.ies2.engine.core;
 
 import java.text.DecimalFormat;
 
@@ -74,7 +74,7 @@ public class GameLoop implements Runnable {
                 try {
                     canvas = this.surfaceHolder.lockCanvas();
                     synchronized (surfaceHolder) {
-                        
+
                         beginTime = System.currentTimeMillis();
                         framesSkipped = 0;
                         this.gameView.update();

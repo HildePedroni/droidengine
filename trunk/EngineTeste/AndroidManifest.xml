@@ -13,15 +13,6 @@
 		android:icon="@drawable/ic_launcher"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme" >
-		<activity
-			android:name="br.com.hilde.engineteste.EngineTesteActivity"
-			android:label="@string/title_activity_engine_teste" >
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
 	</application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package br.com.hilde.endineteste.core;
+package br.com.ies2.engine.core;
 
 import android.content.Context;
 import android.graphics.Canvas;
