@@ -13,10 +13,12 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     public static final String TAG = "Engine";
     private GameLoop loop;
     private String avgFPS;
+    private LayerManager layerManager;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
+        layerManager = new LayerManager();
         loop = new GameLoop(this);
     }
 
@@ -35,11 +37,17 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     // Metodos abstratos
 
-    public abstract void draw(Canvas canvas);
+    public final void draw(Canvas canvas) {
+        layerManager.draw(canvas);
+    }
 
     public abstract void update();
 
     // Metodos de sufaceHolder
+
+    public LayerManager getLayerManager() {
+        return this.layerManager;
+    }
 
     @Override
     public final void surfaceCreated(SurfaceHolder holder) {
