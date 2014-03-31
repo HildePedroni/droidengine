@@ -1,6 +1,8 @@
 package br.com.ies2.droidengine.core;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -41,6 +43,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         layerManager.draw(canvas);
     }
 
+    // Garante que o update da layer será chamado
+    public final void layerUpdate(long gameTime) {
+        layerManager.layerUpdate(gameTime);
+    }
+
     public abstract void update();
 
     // Metodos de sufaceHolder
@@ -74,6 +81,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     protected void setAvgFPS(String avgFPS) {
         this.avgFPS = avgFPS;
+
+    }
+
+    public Bitmap loadImage(int resourceID) {
+        return BitmapFactory.decodeResource(getResources(), resourceID);
     }
 
 }

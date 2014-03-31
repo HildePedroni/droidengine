@@ -36,4 +36,10 @@ public class Rectangle extends Layer {
     public void changePosition(float x, float y) {
         setPosition(x, y);
     }
+
+    @Override
+    public void layerUpdate(long gameTime) {
+        // TODO Auto-generated method stub
+
+    }
 }

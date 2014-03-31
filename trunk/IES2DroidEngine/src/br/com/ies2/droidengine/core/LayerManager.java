@@ -21,6 +21,12 @@ public class LayerManager {
         }
     }
 
+    public void layerUpdate(long gameTime) {
+        for (Layer layer : layers) {
+            layer.layerUpdate(gameTime);
+        }
+    }
+
     public void add(Layer layer) {
         layers.add(layer);
     }

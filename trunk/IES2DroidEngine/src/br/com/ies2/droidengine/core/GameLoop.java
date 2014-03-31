@@ -78,6 +78,7 @@ public class GameLoop implements Runnable {
                         beginTime = System.currentTimeMillis();
                         framesSkipped = 0;
                         this.gameView.update();
+                        this.gameView.layerUpdate(System.currentTimeMillis());
                         this.gameView.clearScreen(canvas);
                         // this.gameView.drawLayerManager(canvas);
                         this.gameView.draw(canvas);
@@ -93,6 +94,7 @@ public class GameLoop implements Runnable {
                         while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
                             // Calculos gerais
                             this.gameView.update();
+                            this.gameView.layerUpdate(System.currentTimeMillis());
                             sleepTime += FRAME_PERIOD;
                             framesSkipped++;
                         }

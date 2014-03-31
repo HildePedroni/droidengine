@@ -23,6 +23,8 @@ public abstract class Layer {
 
     public abstract void draw(Canvas canvas);
 
+    public abstract void layerUpdate(long gameTime);
+
     public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
