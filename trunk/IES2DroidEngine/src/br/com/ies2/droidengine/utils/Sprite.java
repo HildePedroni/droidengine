@@ -168,8 +168,8 @@ public class Sprite extends Layer {
         Rect intersection = new Rect();
         Bitmap otherImage = other.getBitmap();
         intersection.setIntersect(this.collisionRectangle, other.getCollisionRectangle());
-        for (int i = intersection.left; i < intersection.right; i++) {
-            for (int j = intersection.top; j < intersection.bottom; j++) {
+        for (int i = intersection.left+1; i < intersection.right; i++) {
+            for (int j = intersection.top+1; j < intersection.bottom; j++) {
 
                 int pixelA = image.getPixel(i, j);
                 int pixelB = otherImage.getPixel(i, j);
