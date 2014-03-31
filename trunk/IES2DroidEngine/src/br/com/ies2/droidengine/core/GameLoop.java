@@ -164,7 +164,7 @@ public class GameLoop implements Runnable {
             frameCountPerStatCycle = 0;
             statusIntervalTimer = System.currentTimeMillis();
             lastStatusStore = statusIntervalTimer;
-            Log.d(GameView.TAG, "Average FPS:" + df.format(averageFps));
+            // Log.d(GameView.TAG, "Average FPS:" + df.format(averageFps));
             gameView.setAvgFPS("FPS: " + df.format(averageFps));
 
         }

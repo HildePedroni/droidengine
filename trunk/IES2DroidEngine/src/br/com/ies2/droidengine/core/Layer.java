@@ -30,6 +30,11 @@ public abstract class Layer {
         this.y = y;
     }
 
+    public void move(float x, float y) {
+        this.x += x;
+        this.y += y;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

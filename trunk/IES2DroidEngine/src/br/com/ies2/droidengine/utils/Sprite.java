@@ -7,8 +7,11 @@ import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
+import br.com.ies2.droidengine.core.GameView;
 import br.com.ies2.droidengine.core.Layer;
 
 public class Sprite extends Layer {
@@ -27,8 +30,9 @@ public class Sprite extends Layer {
     private int stateFrame = 0;
 
     private long frameTicker;
-    private long begin = 0l;
     private int framePeriod;
+
+    private Rect collisionRectangle;
 
     public Sprite(String name, Bitmap image, int rows, int columns, int fps) {
         super(name);
@@ -64,6 +68,7 @@ public class Sprite extends Layer {
         int srcY = p.y;
         Rect src = new Rect(srcX, srcY, srcX + frameWidth, srcY + frameHeight);
         Rect dst = new Rect((int) getX(), (int) getY(), (int) getX() + frameWidth, (int) getY() + frameHeight);
+        collisionRectangle = dst;
         canvas.drawBitmap(image, src, dst, null);
     }
 
@@ -85,6 +90,10 @@ public class Sprite extends Layer {
     public void changeState(String stateName) {
         this.state = stateName;
         stateChanged = true;
+    }
+
+    public void setBounds() {
+
     }
 
     @Override
@@ -138,4 +147,52 @@ public class Sprite extends Layer {
             }
         }
     }
+
+    public boolean collidesWith(Sprite other, boolean pixelPerfect) {
+        boolean result = false;
+        if (isVisible()) {
+            if (collisionRectangle != null) {
+                if (collisionRectangle.intersect(other.getCollisionRectangle())) {
+                    result = true;
+                    if (pixelPerfect) {
+                        return pixelCollisionTest(other);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean pixelCollisionTest(Sprite other) {
+
+        Rect intersection = new Rect();
+        Bitmap otherImage = other.getBitmap();
+        intersection.setIntersect(this.collisionRectangle, other.getCollisionRectangle());
+        for (int i = intersection.left; i < intersection.right; i++) {
+            for (int j = intersection.top; j < intersection.bottom; j++) {
+
+                int pixelA = image.getPixel(i, j);
+                int pixelB = otherImage.getPixel(i, j);
+
+                int alphavalueA = Color.alpha(pixelA);
+                int alphavalueB = Color.alpha(pixelB);
+
+                if (alphavalueA > 0 && alphavalueB > 0) {
+                    Log.i(GameView.TAG, "Pixel A " + alphavalueA);
+                    Log.i(GameView.TAG, "Pixel B " + alphavalueB);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Rect getCollisionRectangle() {
+        return collisionRectangle;
+    }
+
+    public Bitmap getBitmap() {
+        return this.image;
+    }
+
 }
