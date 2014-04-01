@@ -4,10 +4,10 @@ import android.graphics.Canvas;
 
 public abstract class Layer {
 
-    private float x;
-    private float y;
-    private String name;
-    private boolean isVisible = true;
+	protected float x;
+    protected float y;
+    protected String name;
+    protected boolean isVisible = true;
 
     public Layer(String name) {
         this.name = name;

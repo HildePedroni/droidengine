@@ -10,6 +10,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
+import br.com.ies2.droidengine.core.GameView;
 import br.com.ies2.droidengine.core.Layer;
 
 public class Sprite extends Layer {
@@ -192,23 +194,47 @@ public class Sprite extends Layer {
     }
 
     private boolean pixelCollisionTest(Sprite other) {
-        Rect intersection = getCollisionBounds(this.collisionRectangle, other.getCollisionRectangle());
-        for (int i = intersection.left; i < intersection.right; i++) {
-            for (int j = intersection.top; j < intersection.bottom; j++) {
-                int pixelA = getBitmapPixel(this, i, j);
-                int pixelB = getBitmapPixel(other, i, j);
-                if (isOpaque(pixelA) && isOpaque(pixelB)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    	
+    	Bitmap b1 = getBitmap();
+    	Bitmap b2 = other.getBitmap();
+    	
+    	Rect rectIntersect = new Rect();
+    	
+    	rectIntersect.setIntersect(this.collisionRectangle, other.getCollisionRectangle());
+    	
+    	int left    =   rectIntersect.left;
+    	int top     =    rectIntersect.top;
+    	int right   =  rectIntersect.right;
+    	int bottom  = rectIntersect.bottom;
+    	
+    	int aX, aY, bX, bY;
+    	
+    	for (int i = left; i < right; i++) {
+			for (int j = top; j < bottom; j++) {
+				
+				//obtém o x e y da da intersecção na imagem A
+				aX = (int) (i - this.x);
+				aY = (int) (j - this.y);
+				//obtém o x e y da da intersecção na imagem B
+				bX = (int) (i - other.getX());
+				bY = (int) (j - other.getY());
+				
+				//fora da IMAGEM RECT
+				if(aX < 0 || aY < 0 || bX < 0 || bY < 0){
+					return false;
+				}
+				
+				int corA = b1.getPixel(aX , aY);
+				int corB = b2.getPixel(bX, bY);
+				
+				if(corA != 0 && corB != 0){
+					return true;
+				}
+			}
+		}
+    	return false;
     }
-
-    private static int getBitmapPixel(Sprite sprite, int i, int j) {
-        return sprite.getBitmap().getPixel(i - (int) sprite.getX(), j - (int) sprite.getY());
-    }
-
+    
     private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
         int left = (int) Math.max(rect1.left, rect2.left);
         int top = (int) Math.max(rect1.top, rect2.top);
@@ -217,9 +243,6 @@ public class Sprite extends Layer {
         return new Rect(left, top, right, bottom);
     }
 
-    private static boolean isOpaque(int pixel) {
-        return pixel != Color.TRANSPARENT;
-    }
 
     public Rect getCollisionRectangle() {
         return collisionRectangle;
