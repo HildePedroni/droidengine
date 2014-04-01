@@ -8,6 +8,7 @@ import java.util.Map;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class Sprite extends Layer {
     private int framePeriod;
 
     private Rect collisionRectangle;
+    private Rect interceccao;
 
     public Sprite(String name, Bitmap image, int rows, int columns, int fps) {
         super(name);
@@ -70,6 +72,14 @@ public class Sprite extends Layer {
         Rect dst = new Rect((int) getX(), (int) getY(), (int) getX() + frameWidth, (int) getY() + frameHeight);
         collisionRectangle = dst;
         canvas.drawBitmap(image, src, dst, null);
+
+        // //Para testes
+        // if (interceccao != null) {
+        // Paint paint = new Paint();
+        // paint.setColor(Color.BLACK);
+        // canvas.drawRect(interceccao, paint);
+        // }
+
     }
 
     /**
@@ -164,27 +174,42 @@ public class Sprite extends Layer {
     }
 
     private boolean pixelCollisionTest(Sprite other) {
+        // //Para testes
+        // interceccao = new Rect();
+        // interceccao.setIntersect(this.collisionRectangle,
+        // other.getCollisionRectangle());
+        // //---
+        // intersection.setIntersect(this.collisionRectangle,
+        // other.getCollisionRectangle());
 
-        Rect intersection = new Rect();
-        Bitmap otherImage = other.getBitmap();
-        intersection.setIntersect(this.collisionRectangle, other.getCollisionRectangle());
-        for (int i = intersection.left+1; i < intersection.right; i++) {
-            for (int j = intersection.top+1; j < intersection.bottom; j++) {
+        Rect intersection = getCollisionBounds(this.collisionRectangle, other.getCollisionRectangle());
 
-                int pixelA = image.getPixel(i, j);
-                int pixelB = otherImage.getPixel(i, j);
-
-                int alphavalueA = Color.alpha(pixelA);
-                int alphavalueB = Color.alpha(pixelB);
-
-                if (alphavalueA > 0 && alphavalueB > 0) {
-                    Log.i(GameView.TAG, "Pixel A " + alphavalueA);
-                    Log.i(GameView.TAG, "Pixel B " + alphavalueB);
+        for (int i = intersection.left; i < intersection.right; i++) {
+            for (int j = intersection.top; j < intersection.bottom; j++) {
+                int pixelA = getBitmapPixel(this, i, j);
+                int pixelB = getBitmapPixel(other, i, j);
+                if (isOpaque(pixelA) && isOpaque(pixelB)) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private static int getBitmapPixel(Sprite sprite, int i, int j) {
+        return sprite.getBitmap().getPixel(i - (int) sprite.getX(), j - (int) sprite.getY());
+    }
+
+    private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
+        int left = (int) Math.max(rect1.left, rect2.left);
+        int top = (int) Math.max(rect1.top, rect2.top);
+        int right = (int) Math.min(rect1.right, rect2.right);
+        int bottom = (int) Math.min(rect1.bottom, rect2.bottom);
+        return new Rect(left, top, right, bottom);
+    }
+
+    private static boolean isOpaque(int pixel) {
+        return pixel != Color.TRANSPARENT;
     }
 
     public Rect getCollisionRectangle() {

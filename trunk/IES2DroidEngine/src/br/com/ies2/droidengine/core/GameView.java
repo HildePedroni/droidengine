@@ -2,6 +2,7 @@ package br.com.ies2.droidengine.core;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -84,8 +85,21 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     }
 
-    public Bitmap loadImage(int resourceID) {
-        return BitmapFactory.decodeResource(getResources(), resourceID);
+    /**
+     * Be careful when you set isMuttable to true, because if your image is too
+     * big it can cause a outOfMemory exception.
+     * 
+     * @param resourceID
+     * @param isMutable
+     * @return
+     */
+    public Bitmap loadImage(int resourceID, boolean isMutable) {
+        Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceID);
+        if (isMutable) {
+            return mBitmap.copy(Config.ARGB_8888, true);
+        } else {
+            return mBitmap;
+        }
     }
 
 }
