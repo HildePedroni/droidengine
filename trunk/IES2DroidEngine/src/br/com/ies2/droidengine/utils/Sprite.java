@@ -8,11 +8,8 @@ import java.util.Map;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.util.Log;
-import br.com.ies2.droidengine.core.GameView;
 import br.com.ies2.droidengine.core.Layer;
 
 public class Sprite extends Layer {
@@ -29,12 +26,10 @@ public class Sprite extends Layer {
     private boolean stateChanged = false;
     private int[] atualState;
     private int stateFrame = 0;
-
     private long frameTicker;
     private int framePeriod;
-
     private Rect collisionRectangle;
-    private Rect interceccao;
+    private boolean staticSprite = false;
 
     public Sprite(String name, Bitmap image, int rows, int columns, int fps) {
         super(name);
@@ -60,26 +55,28 @@ public class Sprite extends Layer {
         state = DEFAULT_STATE;
         framePeriod = 1000 / fps;
         frameTicker = 0l;
+    }
 
+    public Sprite(String name, Bitmap image) {
+        super(name);
+        this.image = image;
+        staticSprite = true;
     }
 
     @Override
     public void draw(Canvas canvas) {
-        Point p = framePositions.get(currentFrame);
-        int srcX = p.x;
-        int srcY = p.y;
-        Rect src = new Rect(srcX, srcY, srcX + frameWidth, srcY + frameHeight);
-        Rect dst = new Rect((int) getX(), (int) getY(), (int) getX() + frameWidth, (int) getY() + frameHeight);
-        collisionRectangle = dst;
-        canvas.drawBitmap(image, src, dst, null);
-
-        // //Para testes
-        // if (interceccao != null) {
-        // Paint paint = new Paint();
-        // paint.setColor(Color.BLACK);
-        // canvas.drawRect(interceccao, paint);
-        // }
-
+        if (staticSprite) {
+            canvas.drawBitmap(image, getX(), getY(), null);
+            collisionRectangle = new Rect((int) getX(), (int) getY(), image.getWidth(), image.getHeight());
+        } else {
+            Point p = framePositions.get(currentFrame);
+            int srcX = p.x;
+            int srcY = p.y;
+            Rect src = new Rect(srcX, srcY, srcX + frameWidth, srcY + frameHeight);
+            Rect dst = new Rect((int) getX(), (int) getY(), (int) getX() + frameWidth, (int) getY() + frameHeight);
+            collisionRectangle = dst;
+            canvas.drawBitmap(image, src, dst, null);
+        }
     }
 
     /**
@@ -89,7 +86,16 @@ public class Sprite extends Layer {
      * @param frameSequence
      */
     public void setState(String stateName, int[] frameSequence) {
-        states.put(stateName, frameSequence);
+        if (!staticSprite) {
+            states.put(stateName, frameSequence);
+        } else {
+            try {
+                throw new Exception("States is invalid for static sprites!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     /**
@@ -98,8 +104,16 @@ public class Sprite extends Layer {
      * @param stateName
      */
     public void changeState(String stateName) {
-        this.state = stateName;
-        stateChanged = true;
+        if (!staticSprite) {
+            this.state = stateName;
+            stateChanged = true;
+        } else {
+            try {
+                throw new Exception("Static sprites doen't handle state changes!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setBounds() {
@@ -108,52 +122,56 @@ public class Sprite extends Layer {
 
     @Override
     public void layerUpdate(long gameTime) {
-        if (gameTime > frameTicker + framePeriod) {
-            frameTicker = gameTime;
-            if (state.equals("DEFAULT")) {
-                // Se o status for default corre pelos indices sequencialmente
-                currentFrame++;
-                if (currentFrame > framePositions.size() - 1) {
-                    currentFrame = 0;
-                }
-            } else {
-                // Variavel de controle.
-                boolean allOk = true;
-                /**
-                 * O estado sempre inicia como default. Caso o programador
-                 * queira um estado diferente, ele deve alterar isso com o
-                 * changeState. Feito isso a variável stateChanged tem seu valor
-                 * alterado para que o estado seja trocado;
-                 */
-                if (stateChanged) {
-                    // Trava a condição novamente
-                    stateChanged = false;
-                    // Apaga a referencia ao estado anterior
-                    atualState = null;
-                    // Busca um novo estado.
-                    atualState = states.get(state);
-                    // Caso o estado não exista, ou por não ter sido definido ou
-                    // por
-                    // ter sido chamado
-                    // de forma errada, o estado é definido como o default.
-                    if (atualState == null) {
-                        allOk = false;
-                        changeState(DEFAULT_STATE);
+        if (!staticSprite) {
+            if (gameTime > frameTicker + framePeriod) {
+                frameTicker = gameTime;
+                if (state.equals("DEFAULT")) {
+                    // Se o status for default corre pelos indices
+                    // sequencialmente
+                    currentFrame++;
+                    if (currentFrame > framePositions.size() - 1) {
+                        currentFrame = 0;
                     }
-                }
-
-                // allOk Evita a entrada nesse trecho para evitar
-                // inconsistencias.
-                if (allOk) {
-                    // Pega o frame definido no array
-                    currentFrame = atualState[stateFrame];
-                    stateFrame++; // Incrementa para o proximo
-                    if (stateFrame > atualState.length - 1) {
-                        // Zera o ciclo
-                        stateFrame = 0;
+                } else {
+                    // Variavel de controle.
+                    boolean allOk = true;
+                    /**
+                     * O estado sempre inicia como default. Caso o programador
+                     * queira um estado diferente, ele deve alterar isso com o
+                     * changeState. Feito isso a variável stateChanged tem seu
+                     * valor alterado para que o estado seja trocado;
+                     */
+                    if (stateChanged) {
+                        // Trava a condição novamente
+                        stateChanged = false;
+                        // Apaga a referencia ao estado anterior
+                        atualState = null;
+                        // Busca um novo estado.
+                        atualState = states.get(state);
+                        // Caso o estado não exista, ou por não ter sido
+                        // definido ou
+                        // por
+                        // ter sido chamado
+                        // de forma errada, o estado é definido como o default.
+                        if (atualState == null) {
+                            allOk = false;
+                            changeState(DEFAULT_STATE);
+                        }
                     }
-                }
 
+                    // allOk Evita a entrada nesse trecho para evitar
+                    // inconsistencias.
+                    if (allOk) {
+                        // Pega o frame definido no array
+                        currentFrame = atualState[stateFrame];
+                        stateFrame++; // Incrementa para o proximo
+                        if (stateFrame > atualState.length - 1) {
+                            // Zera o ciclo
+                            stateFrame = 0;
+                        }
+                    }
+
+                }
             }
         }
     }
@@ -174,16 +192,7 @@ public class Sprite extends Layer {
     }
 
     private boolean pixelCollisionTest(Sprite other) {
-        // //Para testes
-        // interceccao = new Rect();
-        // interceccao.setIntersect(this.collisionRectangle,
-        // other.getCollisionRectangle());
-        // //---
-        // intersection.setIntersect(this.collisionRectangle,
-        // other.getCollisionRectangle());
-
         Rect intersection = getCollisionBounds(this.collisionRectangle, other.getCollisionRectangle());
-
         for (int i = intersection.left; i < intersection.right; i++) {
             for (int j = intersection.top; j < intersection.bottom; j++) {
                 int pixelA = getBitmapPixel(this, i, j);
