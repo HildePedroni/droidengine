@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<br.com.ies2.testedroidengine.GameCanvas xmlns:android="http://schemas.android.com/apk/res/android"
+<br.com.ies2.testedroidengine.classesutilitarias.GameCanvas xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/gameCanvas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

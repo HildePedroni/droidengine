@@ -4,5 +4,7 @@
 	<string name="app_name">TesteDroidEngine</string>
 	<string name="hello_world">Hello world!</string>
 	<string name="action_settings">Settings</string>
+	<string name="sprite_teste">Sprite Teste</string>
+	<string name="svg_teste">SVG Teste</string>
 
 </resources>
