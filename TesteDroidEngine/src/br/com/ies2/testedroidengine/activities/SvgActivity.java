@@ -9,6 +9,6 @@ public class SvgActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.teste);
+        setContentView(R.layout.svg_layout);
     }
 }
