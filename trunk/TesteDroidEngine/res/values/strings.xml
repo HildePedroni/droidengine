@@ -6,5 +6,7 @@
 	<string name="action_settings">Settings</string>
 	<string name="sprite_teste">Sprite Teste</string>
 	<string name="svg_teste">SVG Teste</string>
+	<string name="title_activity_svg">Teste SVG Image</string>
+	<string name="title_activity_sprite">Teste Classe Sprite</string>
 
 </resources>
