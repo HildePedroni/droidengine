@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <br.com.ies2.testedroidengine.SvgView
+    <br.com.ies2.testedroidengine.classesutilitarias.SvgView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/teste2" />
 
-    <br.com.ies2.testedroidengine.SvgView
+    <br.com.ies2.testedroidengine.classesutilitarias.SvgView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/android" />
