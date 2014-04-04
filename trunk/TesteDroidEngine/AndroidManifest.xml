@@ -22,6 +22,14 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<activity
+			android:name="br.com.ies2.testedroidengine.activities.SpriteActivity"
+			android:label="@string/title_activity_sprite" >
+		</activity>
+		<activity
+            android:name="br.com.ies2.testedroidengine.activities.SvgActivity"
+            android:label="@string/title_activity_svg" >
+        </activity>
 	</application>
 
 </manifest>
