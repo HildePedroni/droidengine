@@ -85,6 +85,10 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     }
 
+    public String getAvgFPS() {
+        return this.avgFPS;
+    }
+
     /**
      * Be careful when you set isMuttable to true, because if your image is too
      * big it can cause a outOfMemory exception.
