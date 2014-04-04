@@ -17,4 +17,8 @@ public final class R {
 		public static final int AppBaseTheme = 0x7f050000;
 		public static final int AppTheme = 0x7f050001;
 	}
+	public static final class styleable {
+		public static final int[] SvgView = { 0x01010119 };
+		public static final int SvgView_android_src = 0;
+	}
 }
