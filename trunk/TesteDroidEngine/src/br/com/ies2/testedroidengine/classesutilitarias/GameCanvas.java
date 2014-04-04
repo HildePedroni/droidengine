@@ -1,4 +1,4 @@
-package br.com.ies2.testedroidengine;
+package br.com.ies2.testedroidengine.classesutilitarias;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import br.com.ies2.droidengine.core.GameView;
 import br.com.ies2.droidengine.utils.Sprite;
+import br.com.ies2.testedroidengine.R;
 
 public class GameCanvas extends GameView {
 

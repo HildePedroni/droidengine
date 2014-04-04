@@ -1,4 +1,4 @@
-package br.com.ies2.testedroidengine;
+package br.com.ies2.testedroidengine.classesutilitarias;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import br.com.ies2.testedroidengine.R;
+import br.com.ies2.testedroidengine.R.styleable;
 
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
