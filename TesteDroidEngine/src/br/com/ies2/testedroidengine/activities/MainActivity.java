@@ -8,7 +8,7 @@ import android.view.View;
 import br.com.ies2.testedroidengine.R;
 
 public class MainActivity extends Activity {
-
+	//Teste
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
