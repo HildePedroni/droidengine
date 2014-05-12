@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+//comentario
 public class GameLoop implements Runnable {
 
     private GameView gameView;
