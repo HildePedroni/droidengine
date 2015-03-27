@@ -6,10 +6,13 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 public abstract class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -17,16 +20,31 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     private GameLoop loop;
     private String avgFPS;
     private LayerManager layerManager;
+    private int screenW;
+    private int screenH;
+
+    private void calculaTamanho() {
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenH = size.y;
+        screenW = size.x;
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        calculaTamanho();
+        initiateElements();
+        loop.startGame();
+        super.onLayout(changed, left, top, right, bottom);
+    }
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
         layerManager = new LayerManager();
         loop = new GameLoop(this);
-    }
-
-    public final void startGame() {
-        loop.startGame();
     }
 
     public final void stopGame() {
@@ -49,6 +67,12 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         layerManager.layerUpdate(gameTime);
     }
 
+    /**
+     * Todos os elementos que serão desenhados na tela, sprites e layers devem
+     * ser iniciados nesse metodo.
+     */
+    public abstract void initiateElements();
+
     public abstract void update();
 
     // Metodos de sufaceHolder
@@ -69,7 +93,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     @Override
     public final void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.i(TAG, "SurfaceChanged");
-        // TODO Auto-generated method stub
         loop.setSurfaceHolder(holder);
     }
 
@@ -104,6 +127,14 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         } else {
             return mBitmap;
         }
+    }
+
+    public int getScreenW() {
+        return screenW;
+    }
+
+    public int getScreenH() {
+        return screenH;
     }
 
 }
