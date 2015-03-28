@@ -41,7 +41,7 @@ public class LayerManager {
      * @param index
      * @return
      */
-    public Layer getLayerFromIndex(int index) {
+    public Layer getLayerByIndex(int index) {
         if (index <= layers.size() || index < 0) {
             return layers.get(index);
         } else {
@@ -55,7 +55,7 @@ public class LayerManager {
      * @param name
      * @return Layer
      */
-    public Layer getLayerFromName(String name) {
+    public Layer getLayerByName(String name) {
         for (Layer layer : layers) {
             if (layer.getName().equals(name)) {
                 return layer;
