@@ -16,125 +16,130 @@ import android.view.WindowManager;
 
 public abstract class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
-    public static final String TAG = "Engine";
-    private GameLoop loop;
-    private String avgFPS;
-    private LayerManager layerManager;
-    private int screenW;
-    private int screenH;
+	public static final String TAG = "Engine";
+	private GameLoop loop;
+	private String avgFPS;
+	private LayerManager layerManager;
+	private int screenW;
+	private int screenH;
 
-    private void calculaTamanho() {
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenH = size.y;
-        screenW = size.x;
-    }
+	private void calculaTamanho() {
+		WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		screenH = size.y;
+		screenW = size.x;
+	}
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        calculaTamanho();
-        initiateElements();
-        loop.startGame();
-        super.onLayout(changed, left, top, right, bottom);
-    }
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		calculaTamanho();
+		initiateElements();
+		// Game só inicia depois da tela carregada
+		loop.free();
+		super.onLayout(changed, left, top, right, bottom);
+	}
 
-    public GameView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        getHolder().addCallback(this);
-        layerManager = new LayerManager();
-        loop = new GameLoop(this);
-    }
+	public GameView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		getHolder().addCallback(this);
+		layerManager = new LayerManager();
+		loop = new GameLoop(this);
+	}
 
-    public final void stopGame() {
-        loop.stopGame();
-    }
+	public final void startGame() {
+		loop.startGame();
+	}
 
-    public void clearScreen(Canvas canvas) {
-        postInvalidate();
-        canvas.drawColor(Color.WHITE);
-    }
+	public final void stopGame() {
+		loop.stopGame();
+	}
 
-    // Metodos abstratos
+	public void clearScreen(Canvas canvas) {
+		postInvalidate();
+		canvas.drawColor(Color.WHITE);
+	}
 
-    public final void draw(Canvas canvas) {
-        layerManager.draw(canvas);
-    }
+	// Metodos abstratos
 
-    // Garante que o update da layer será chamado
-    public final void layerUpdate(long gameTime) {
-        layerManager.layerUpdate(gameTime);
-    }
+	public final void draw(Canvas canvas) {
+		layerManager.draw(canvas);
+	}
 
-    /**
-     * Todos os elementos que serão desenhados na tela, sprites e layers devem
-     * ser iniciados nesse metodo.
-     */
-    public abstract void initiateElements();
+	// Garante que o update da layer será chamado
+	public final void layerUpdate(long gameTime) {
+		layerManager.layerUpdate(gameTime);
+	}
 
-    public abstract void update();
+	/**
+	 * Todos os elementos que serão desenhados na tela, sprites e layers devem
+	 * ser iniciados nesse metodo.
+	 */
+	public abstract void initiateElements();
 
-    // Metodos de sufaceHolder
+	public abstract void update();
 
-    public LayerManager getLayerManager() {
-        return this.layerManager;
-    }
+	// Metodos de sufaceHolder
 
-    @Override
-    public final void surfaceCreated(SurfaceHolder holder) {
-        Log.i(TAG, "SurfaceCreated");
-        // Assim que a surface estiver pronta
-        // para desenho é enviado para o loop o
-        // surfaceHolder.
-        loop.setSurfaceHolder(holder);
-    }
+	public LayerManager getLayerManager() {
+		return this.layerManager;
+	}
 
-    @Override
-    public final void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.i(TAG, "SurfaceChanged");
-        loop.setSurfaceHolder(holder);
-    }
+	@Override
+	public final void surfaceCreated(SurfaceHolder holder) {
+		Log.i(TAG, "SurfaceCreated");
+		// Assim que a surface estiver pronta
+		// para desenho é enviado para o loop o
+		// surfaceHolder.
+		loop.setSurfaceHolder(holder);
+	}
 
-    @Override
-    public final void surfaceDestroyed(SurfaceHolder holder) {
-        Log.i(TAG, "SurfaceDestroied");
-        // TODO Auto-generated method stub
+	@Override
+	public final void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		Log.i(TAG, "SurfaceChanged");
+		loop.setSurfaceHolder(holder);
+	}
 
-    }
+	@Override
+	public final void surfaceDestroyed(SurfaceHolder holder) {
+		Log.i(TAG, "SurfaceDestroied");
+		// TODO Auto-generated method stub
 
-    protected void setAvgFPS(String avgFPS) {
-        this.avgFPS = avgFPS;
+	}
 
-    }
+	protected void setAvgFPS(String avgFPS) {
+		this.avgFPS = avgFPS;
 
-    public String getAvgFPS() {
-        return this.avgFPS;
-    }
+	}
 
-    /**
-     * Be careful when you set isMuttable to true, because if your image is too
-     * big it can cause a outOfMemory exception.
-     * 
-     * @param resourceID
-     * @param isMutable
-     * @return
-     */
-    public Bitmap loadImage(int resourceID, boolean isMutable) {
-        Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceID);
-        if (isMutable) {
-            return mBitmap.copy(Config.ARGB_8888, true);
-        } else {
-            return mBitmap;
-        }
-    }
+	public String getAvgFPS() {
+		return this.avgFPS;
+	}
 
-    public int getScreenW() {
-        return screenW;
-    }
+	/**
+	 * Be careful when you set isMuttable to true, because if your image is too
+	 * big it can cause a outOfMemory exception.
+	 * 
+	 * @param resourceID
+	 * @param isMutable
+	 * @return
+	 */
+	public Bitmap loadImage(int resourceID, boolean isMutable) {
+		Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceID);
+		if (isMutable) {
+			return mBitmap.copy(Config.ARGB_8888, true);
+		} else {
+			return mBitmap;
+		}
+	}
 
-    public int getScreenH() {
-        return screenH;
-    }
+	public int getScreenW() {
+		return screenW;
+	}
+
+	public int getScreenH() {
+		return screenH;
+	}
 
 }
