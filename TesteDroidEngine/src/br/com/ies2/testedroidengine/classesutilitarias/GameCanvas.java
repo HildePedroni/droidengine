@@ -48,4 +48,10 @@ public class GameCanvas extends GameView {
         }
     }
 
+	@Override
+	public void initiateElements() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
